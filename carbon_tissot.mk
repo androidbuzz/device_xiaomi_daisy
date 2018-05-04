@@ -16,8 +16,9 @@
 
 $(call inherit-product, device/xiaomi/tissot/full_tissot.mk)
 
-# Inherit some common DirtyUnicorns stuff.
+# Inherit some common Carbon stuff.
 $(call inherit-product, vendor/carbon/config/common.mk)
+$(call inherit-product, vendor/carbon/config/gsm.mk)
 
 # A/B updater
 AB_OTA_UPDATER := true
@@ -62,3 +63,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="tissot-user 8.0.0 OPR1.170623.026 8.1.10 release-keys"
 
 BUILD_FINGERPRINT := xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/8.1.10:user/release-keys
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.carbon.maintainer="VenkatVV/venky_holmes"
