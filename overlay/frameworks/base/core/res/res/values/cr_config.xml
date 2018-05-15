@@ -19,4 +19,7 @@
     <!-- Can the LED pulse ? -->
     <bool name="config_ledCanPulse">true</bool>
 
+    <!-- Enable system navigation keys. -->
+   <bool name="config_supportSystemNavigationKeys">true</bool>
+
 </resources>

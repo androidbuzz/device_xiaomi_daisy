@@ -21,7 +21,7 @@ $(call inherit-product, vendor/xiaomi/tissot/tissot-vendor.mk)
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-carbon
+    $(LOCAL_PATH)/overlay-lineage
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
