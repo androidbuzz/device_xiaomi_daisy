@@ -17,8 +17,8 @@
 $(call inherit-product, device/xiaomi/tissot/full_tissot.mk)
 
 # Inherit some common Carbon stuff.
-$(call inherit-product, vendor/carbon/config/common.mk)
-$(call inherit-product, vendor/carbon/config/gsm.mk)
+$(call inherit-product, vendor/mdroid/config/common_full_phonr.mk)
+
 
 # A/B updater
 AB_OTA_UPDATER := true
@@ -53,7 +53,7 @@ PRODUCT_STATIC_BOOT_CONTROL_HAL := \
     libgptutils \
     libz
 
-PRODUCT_NAME := carbon_tissot
+PRODUCT_NAME := mdroid_tissot
 BOARD_VENDOR := Xiaomi
 PRODUCT_DEVICE := tissot
 
@@ -64,5 +64,5 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 
 BUILD_FINGERPRINT := xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/8.1.10:user/release-keys
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.carbon.maintainer="VenkatVV/venky_holmes"
+
+
