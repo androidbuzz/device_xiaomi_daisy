@@ -103,9 +103,6 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
-# Clang
-TARGET_KERNEL_CLANG_COMPILE := true
-
 # CNE / DPM
 BOARD_USES_QCNE := true
 
