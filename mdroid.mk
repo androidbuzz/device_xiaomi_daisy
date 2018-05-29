@@ -16,8 +16,8 @@
 
 $(call inherit-product, device/xiaomi/tissot/full_tissot.mk)
 
-# Inherit some common Carbon stuff.
-$(call inherit-product, vendor/mdroid/config/common_full_phonr.mk)
+# Inherit some common Miracle stuff.
+$(call inherit-product, vendor/mdroid/config/common_full_phone.mk)
 
 
 # A/B updater
