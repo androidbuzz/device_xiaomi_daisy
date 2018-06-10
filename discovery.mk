@@ -16,8 +16,8 @@
 
 $(call inherit-product, device/xiaomi/tissot/full_tissot.mk)
 
-# Inherit some common Colt stuff.
-$(call inherit-product, vendor/colt/config/common_full_phone.mk)
+# Inherit some common Discovery stuff.
+$(call inherit-product, vendor/discovery/config/common_full_phone.mk)
 
 
 # A/B updater
@@ -53,7 +53,7 @@ PRODUCT_STATIC_BOOT_CONTROL_HAL := \
     libgptutils \
     libz
 
-PRODUCT_NAME := colt_tissot
+PRODUCT_NAME := discovery_tissot
 BOARD_VENDOR := Xiaomi
 PRODUCT_DEVICE := tissot
 
