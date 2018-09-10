@@ -16,4 +16,4 @@
 
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/full_tissot.mk \
-    $(LOCAL_DIR)/discovery_tissot.mk
+    $(LOCAL_DIR)/syberia_tissot.mk

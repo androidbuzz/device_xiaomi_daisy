@@ -16,8 +16,12 @@
 
 $(call inherit-product, device/xiaomi/tissot/full_tissot.mk)
 
-# Inherit some common Discovery stuff.
-$(call inherit-product, vendor/discovery/config/common_full_phone.mk)
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Inherit some common Syberian stuff.
+$(call inherit-product, vendor/syberia/common.mk)
 
 
 # A/B updater
@@ -44,7 +48,7 @@ PRODUCT_PACKAGES_DEBUG += \
     bootctl \
     update_engine_client
 
-PRODUCT_NAME := discovery_tissot
+PRODUCT_NAME := syberia_tissot
 BOARD_VENDOR := Xiaomi
 PRODUCT_DEVICE := tissot
 
