@@ -130,4 +130,8 @@ void vendor_load_properties()
     android::init::property_set("ro.hwui.text_small_cache_height", "1024");
     android::init::property_set("ro.hwui.text_large_cache_width", "2048");
     android::init::property_set("ro.hwui.text_large_cache_height", large_cache_height);
+{
+    // Init a dummy BT MAC address, will be overwritten later
+    property_set("ro.boot.btmacaddr", "00:00:00:00:00:00");
 }
+
