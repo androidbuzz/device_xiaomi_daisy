@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-DEVICE_PATH := device/xiaomi/tissot
+DEVICE_PATH := device/xiaomi/daisy
 
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
@@ -26,7 +26,7 @@ TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := cortex-a53
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53
@@ -40,13 +40,21 @@ TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
 BOARD_KERNEL_BASE := 0x80000000
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.bootdevice=7824900.sdhci earlycon=msm_hsl_uart,0x78af000
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.bootdevice=7824900.sdhci earlycon=msm_hsl_uart,0x78af000 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-BOARD_KERNEL_PAGESIZE :=  2048
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
-TARGET_KERNEL_CONFIG := tissot_defconfig
-TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8953
+BOARD_KERNEL_PAGESIZE := 2048
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+BOARD_RAMDISK_OFFSET := 0x01000000
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_CONFIG := daisy_defconfig
+TARGET_KERNEL_HEADER_ARCH := arm64
+ifeq ($(TARGET_PREBUILT_KERNEL),)
+  TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+  TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8953
+endif
+
+NEED_KERNEL_MODULE_SYSTEM := true
 
 # ANT
 #BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -102,7 +110,6 @@ TARGET_TS_MAKEUP := true
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
-BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
 
 # CNE / DPM
 BOARD_USES_QCNE := true
@@ -133,17 +140,21 @@ TARGET_USES_OVERLAY := true
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
-VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
-
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 USE_OPENGL_RENDERER := true
 
 # DT2W
-TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/enable_dt2w"
+TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/wakeup_gesture"
 
 # Filesystem
+TARGET_USERIMAGES_USE_F2FS := true
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_ROOT_EXTRA_SYMLINKS := \
+    /vendor/dsp:/dsp \
+    /vendor/firmware_mnt:/firmware \
+    /mnt/vendor/persist:/persist
+TARGET_COPY_OUT_VENDOR := vendor
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
 
 # FM
@@ -155,6 +166,8 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := true
 USE_DEVICE_SPECIFIC_GPS := true
 
 # HIDL
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/vendor_framework_compatibility_matrix.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/framework_manifest.xml
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 DEVICE_MATRIX_FILE   := $(DEVICE_PATH)/compatibility_matrix.xml
 
@@ -162,9 +175,9 @@ DEVICE_MATRIX_FILE   := $(DEVICE_PATH)/compatibility_matrix.xml
 HWUI_COMPILE_FOR_PERF := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := libinit_tissot
+TARGET_INIT_VENDOR_LIB := libinit_daisy
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
-TARGET_RECOVERY_DEVICE_MODULES := libinit_tissot
+TARGET_RECOVERY_DEVICE_MODULES := libinit_daisy
 
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
@@ -181,45 +194,38 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 55087438848
-BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
-BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2684354560
+BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 54819535872 # 25765059584 - 16384
+BOARD_VENDORIMAGE_PARTITION_SIZE := 805306368
+TARGET_USES_MKE2FS := true
 
-BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_USES_RECOVERY_AS_BOOT := true
-TARGET_NO_RECOVERY := true
-TARGET_EXFAT_DRIVER := exfat
-TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
+TARGET_COPY_OUT_VENDOR := vendor
 
 # Peripheral manager
 TARGET_PER_MGR_ENABLED := true
 
 # Power
-TARGET_POWERHAL_VARIANT := qcom
-
-# Properties
-TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
+#TARGET_POWERHAL_VARIANT := qcom
 
 # Qualcomm
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USE_SDCLANG := true
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/recovery/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/fstab.qcom
 
 # RIL
 #TARGET_RIL_VARIANT := caf
 
-# Root
-BOARD_ROOT_EXTRA_FOLDERS := dsp firmware persist
-
 # SELinux
-#include device/qcom/sepolicy/sepolicy.mk
-BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/temp
+include device/qcom/sepolicy/sepolicy.mk
+#BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
+
+# Treble
+BOARD_VNDK_VERSION := current
+PRODUCT_FULL_TREBLE_OVERRIDE := true
+PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 
 # Wi-Fi
 BOARD_HAS_QCOM_WLAN := true
@@ -237,4 +243,4 @@ WIFI_DRIVER_FW_PATH_P2P := "p2p"
 WIFI_HIDL_FEATURE_AWARE := true
 
 # Inherit from the proprietary version
--include vendor/xiaomi/tissot/BoardConfigVendor.mk
+-include vendor/xiaomi/daisy/BoardConfigVendor.mk
